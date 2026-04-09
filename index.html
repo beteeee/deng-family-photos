@@ -4,9 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>邓家相册 · 家的温度</title>
-  <!-- 背景音乐 -->
+  <!-- 背景音乐 - 温馨钢琴曲 -->
   <audio id="bgMusic" loop>
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=soft-piano-100-bpm-121529.mp3" type="audio/mpeg">
   </audio>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -69,6 +69,14 @@
     }
     .nav-logo span { color: var(--gold); }
     .nav-links { display: flex; gap: 32px; list-style: none; }
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--brown);
+    }
     .nav-links a {
       text-decoration: none;
       font-size: 0.85rem;
@@ -710,7 +718,20 @@
     /* ══════════ RESPONSIVE ══════════ */
     @media (max-width: 768px) {
       nav { padding: 16px 24px; }
-      .nav-links { display: none; }
+      .nav-links { 
+        display: none;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        right: 0;
+        background: rgba(253,248,243,0.98);
+        flex-direction: column;
+        padding: 20px;
+        gap: 16px;
+        box-shadow: 0 4px 20px var(--shadow);
+      }
+      .nav-links.active { display: flex; }
+      .mobile-menu-btn { display: block; }
 
       .about-grid { grid-template-columns: 1fr; gap: 40px; }
       .about-badge { right: 0; bottom: -16px; }
@@ -744,11 +765,12 @@
   <!-- ── NAVIGATION ── -->
   <nav id="navbar">
     <div class="nav-logo">邓<span>家</span> · 相册</div>
-    <ul class="nav-links">
-      <li><a href="#about">关于我们</a></li>
-      <li><a href="#gallery">相册</a></li>
-      <li><a href="#timeline">时光轴</a></li>
-      <li><a href="#members">家庭成员</a></li>
+    <button class="mobile-menu-btn" onclick="toggleMobileMenu()">☰</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about" onclick="closeMobileMenu()">关于我们</a></li>
+      <li><a href="#gallery" onclick="closeMobileMenu()">相册</a></li>
+      <li><a href="#timeline" onclick="closeMobileMenu()">时光轴</a></li>
+      <li><a href="#members" onclick="closeMobileMenu()">家庭成员</a></li>
     </ul>
   </nav>
 
@@ -1193,6 +1215,16 @@
         document.addEventListener('scroll', startMusic);
       });
     });
+
+    // ── Mobile menu toggle
+    function toggleMobileMenu() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.toggle('active');
+    }
+    function closeMobileMenu() {
+      const navLinks = document.getElementById('navLinks');
+      navLinks.classList.remove('active');
+    }
   </script>
 </body>
 </html>
