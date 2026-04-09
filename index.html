@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>邓家相册 · 家的温度</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream: #fdf8f3;
+      --warm-white: #fffcf7;
+      --gold: #c9a96e;
+      --gold-light: #e8d5b0;
+      --brown: #6b4e35;
+      --brown-light: #9c7a5a;
+      --text-dark: #2c2416;
+      --text-mid: #5a4a38;
+      --text-light: #9c8a76;
+      --accent: #d4856a;
+      --accent-light: #f0c4b4;
+      --green: #7a9e7e;
+      --shadow: rgba(107, 78, 53, 0.12);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Noto Sans SC', sans-serif;
+      background-color: var(--cream);
+      color: var(--text-dark);
+      overflow-x: hidden;
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--cream); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-light); border-radius: 3px; }
+
+    /* ══════════ NAVIGATION ══════════ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 18px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.4s, box-shadow 0.4s;
+    }
+    nav.scrolled {
+      background: rgba(253,248,243,0.92);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 2px 20px var(--shadow);
+    }
+    .nav-logo {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--brown);
+      letter-spacing: 0.05em;
+    }
+    .nav-logo span { color: var(--gold); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text-mid);
+      letter-spacing: 0.06em;
+      transition: color 0.25s;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0; right: 0;
+      height: 1.5px;
+      background: var(--gold);
+      transform: scaleX(0);
+      transition: transform 0.3s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+
+    /* ══════════ HERO ══════════ */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 600px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* 渐变背景替代图片 */
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 60%, rgba(212,133,106,0.18) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 30%, rgba(201,169,110,0.2) 0%, transparent 55%),
+        radial-gradient(ellipse at 50% 90%, rgba(122,158,126,0.12) 0%, transparent 50%),
+        linear-gradient(160deg, #f5ede0 0%, #ecdcc8 40%, #e0cdb8 100%);
+    }
+
+    /* 装饰圆圈 */
+    .hero-circle {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.15;
+    }
+    .hero-circle-1 {
+      width: 500px; height: 500px;
+      top: -80px; right: -100px;
+      background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
+    }
+    .hero-circle-2 {
+      width: 300px; height: 300px;
+      bottom: 80px; left: -60px;
+      background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+    }
+    .hero-circle-3 {
+      width: 200px; height: 200px;
+      top: 40%; left: 55%;
+      background: radial-gradient(circle, var(--green) 0%, transparent 70%);
+    }
+
+    /* 浮动叶片装饰 */
+    .leaf {
+      position: absolute;
+      opacity: 0.1;
+      font-size: 3rem;
+      animation: floatLeaf 8s ease-in-out infinite;
+    }
+    .leaf-1 { top: 15%; left: 8%; animation-delay: 0s; }
+    .leaf-2 { top: 25%; right: 12%; animation-delay: 2s; font-size: 2rem; }
+    .leaf-3 { bottom: 20%; left: 20%; animation-delay: 4s; font-size: 1.5rem; }
+    .leaf-4 { bottom: 30%; right: 18%; animation-delay: 1s; font-size: 2.5rem; }
+
+    @keyframes floatLeaf {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-18px) rotate(8deg); }
+    }
+
+    .hero-content {
+      position: relative;
+      text-align: center;
+      padding: 0 24px;
+      animation: fadeUp 1s ease forwards;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border: 1px solid var(--gold-light);
+      padding: 6px 18px;
+      border-radius: 20px;
+      margin-bottom: 24px;
+      background: rgba(255,255,255,0.5);
+    }
+
+    .hero-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 700;
+      color: var(--brown);
+      line-height: 1.1;
+      margin-bottom: 20px;
+      text-shadow: 0 2px 20px rgba(107,78,53,0.1);
+    }
+    .hero-title .highlight {
+      color: var(--gold);
+      position: relative;
+    }
+    .hero-title .highlight::after {
+      content: '';
+      position: absolute;
+      bottom: 4px; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      border-radius: 2px;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+      color: var(--text-mid);
+      font-weight: 300;
+      letter-spacing: 0.08em;
+      margin-bottom: 36px;
+      line-height: 1.8;
+    }
+
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--brown-light) 100%);
+      color: white;
+      text-decoration: none;
+      padding: 14px 32px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      box-shadow: 0 8px 24px rgba(201,169,110,0.35);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .hero-cta:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 30px rgba(201,169,110,0.45);
+    }
+    .hero-cta svg { width: 18px; height: 18px; }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-light);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      animation: bounce 2s infinite;
+    }
+    @keyframes bounce {
+      0%,100% { transform: translateX(-50%) translateY(0); }
+      50%      { transform: translateX(-50%) translateY(6px); }
+    }
+    .hero-scroll .arrow {
+      width: 20px; height: 20px;
+      border-right: 2px solid var(--gold-light);
+      border-bottom: 2px solid var(--gold-light);
+      transform: rotate(45deg);
+    }
+
+    /* ══════════ SECTION BASE ══════════ */
+    section { padding: 100px 0; }
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 32px; }
+
+    .section-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 10px;
+      display: block;
+    }
+    .section-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 600;
+      color: var(--brown);
+      margin-bottom: 16px;
+      line-height: 1.3;
+    }
+    .section-desc {
+      font-size: 0.95rem;
+      color: var(--text-light);
+      line-height: 1.9;
+      max-width: 480px;
+    }
+    .section-header { margin-bottom: 56px; }
+
+    /* ══════════ ABOUT / FAMILY INTRO ══════════ */
+    #about { background: var(--warm-white); }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 72px;
+      align-items: center;
+    }
+
+    .about-visual {
+      position: relative;
+    }
+
+    /* 模拟家庭照片区域 */
+    .photo-frame {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px var(--shadow);
+    }
+
+
+
+    .about-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 20px;
+      display: block;
+    }
+
+    .about-badge {
+      position: absolute;
+      bottom: -20px;
+      right: -20px;
+      background: white;
+      border-radius: 16px;
+      padding: 16px 20px;
+      box-shadow: 0 8px 30px var(--shadow);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .badge-icon {
+      width: 44px; height: 44px;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+    }
+    .badge-text { font-size: 0.8rem; color: var(--text-mid); line-height: 1.5; }
+    .badge-text strong { display: block; color: var(--brown); font-weight: 600; font-size: 1rem; }
+
+    .about-text .section-desc { max-width: 100%; }
+
+    .family-stats {
+      display: flex;
+      gap: 32px;
+      margin-top: 40px;
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .stat-unit { font-size: 0.9rem; color: var(--text-light); margin-top: 4px; }
+
+    .divider-v {
+      width: 1px;
+      background: var(--gold-light);
+      align-self: stretch;
+    }
+
+    /* ══════════ GALLERY ══════════ */
+    #gallery {
+      background: var(--cream);
+    }
+
+    .gallery-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 48px;
+    }
+    .view-all {
+      font-size: 0.85rem;
+      color: var(--gold);
+      text-decoration: none;
+      border-bottom: 1px solid var(--gold-light);
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .view-all:hover { color: var(--brown); border-color: var(--brown); }
+
+    /* Masonry-style grid */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-auto-rows: 60px;
+      gap: 16px;
+    }
+
+    .gallery-item {
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
+    }
+    .gallery-item:hover {
+      transform: translateY(-6px) scale(1.01);
+      box-shadow: 0 20px 50px var(--shadow);
+      z-index: 2;
+    }
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+
+    .gallery-item-1 { grid-column: span 5; grid-row: span 5; }
+    .gallery-item-2 { grid-column: span 4; grid-row: span 3; }
+    .gallery-item-3 { grid-column: span 3; grid-row: span 3; }
+    .gallery-item-4 { grid-column: span 4; grid-row: span 3; }
+    .gallery-item-5 { grid-column: span 3; grid-row: span 2; }
+    .gallery-item-6 { grid-column: span 5; grid-row: span 4; }
+    .gallery-item-7 { grid-column: span 4; grid-row: span 2; }
+    .gallery-item-8 { grid-column: span 3; grid-row: span 4; }
+
+    .gallery-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .gallery-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(44,36,22,0.6) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.35s;
+      display: flex;
+      align-items: flex-end;
+      padding: 16px;
+    }
+    .overlay-text {
+      color: white;
+      font-size: 0.82rem;
+      font-family: 'Noto Serif SC', serif;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+    }
+
+    /* ══════════ TIMELINE ══════════ */
+    #timeline { background: var(--warm-white); }
+
+    .timeline-wrap {
+      position: relative;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .timeline-wrap::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(to bottom, transparent, var(--gold-light) 10%, var(--gold-light) 90%, transparent);
+      transform: translateX(-50%);
+    }
+
+    .tl-item {
+      display: flex;
+      gap: 40px;
+      margin-bottom: 56px;
+      position: relative;
+      align-items: flex-start;
+    }
+    .tl-item:nth-child(even) { flex-direction: row-reverse; }
+    .tl-item:nth-child(even) .tl-content { text-align: right; }
+
+    .tl-dot {
+      position: absolute;
+      left: 50%;
+      top: 12px;
+      transform: translateX(-50%);
+      width: 16px; height: 16px;
+      background: var(--gold);
+      border: 3px solid var(--warm-white);
+      border-radius: 50%;
+      box-shadow: 0 0 0 4px var(--gold-light);
+      z-index: 1;
+    }
+
+    .tl-content {
+      flex: 1;
+      background: white;
+      border-radius: 16px;
+      padding: 24px 28px;
+      box-shadow: 0 4px 20px var(--shadow);
+      position: relative;
+    }
+    .tl-year {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--gold);
+      letter-spacing: 0.15em;
+      margin-bottom: 6px;
+    }
+    .tl-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--brown);
+      margin-bottom: 8px;
+    }
+    .tl-desc {
+      font-size: 0.875rem;
+      color: var(--text-light);
+      line-height: 1.8;
+    }
+    .tl-emoji {
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .tl-spacer { flex: 1; } /* opposite side spacer */
+
+    /* ══════════ MEMBERS ══════════ */
+    #members { background: var(--cream); }
+
+    .members-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+    }
+
+    .member-card {
+      background: white;
+      border-radius: 20px;
+      padding: 32px 24px;
+      text-align: center;
+      box-shadow: 0 4px 20px var(--shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .member-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--gold), var(--accent));
+    }
+    .member-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 16px 40px var(--shadow);
+    }
+
+    .member-avatar {
+      width: 88px; height: 88px;
+      border-radius: 50%;
+      margin: 0 auto 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.6rem;
+      background: linear-gradient(135deg, var(--gold-light), var(--accent-light));
+      box-shadow: 0 6px 20px rgba(201,169,110,0.25);
+    }
+    .member-name {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--brown);
+      margin-bottom: 4px;
+    }
+    .member-role {
+      font-size: 0.78rem;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      margin-bottom: 14px;
+    }
+    .member-quote {
+      font-size: 0.82rem;
+      color: var(--text-light);
+      line-height: 1.7;
+      font-style: italic;
+    }
+
+    /* ══════════ QUOTE ══════════ */
+    #quote {
+      background: linear-gradient(135deg, var(--brown) 0%, #4a3222 100%);
+      padding: 100px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    #quote::before {
+      content: '家';
+      position: absolute;
+      font-family: 'Noto Serif SC', serif;
+      font-size: 30vw;
+      font-weight: 700;
+      color: rgba(255,255,255,0.03);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .quote-content { text-align: center; position: relative; }
+    .quote-icon {
+      font-size: 3rem;
+      margin-bottom: 24px;
+      opacity: 0.5;
+      display: block;
+    }
+    .quote-text {
+      font-family: 'Noto Serif SC', serif;
+      font-size: clamp(1.4rem, 3.5vw, 2.2rem);
+      font-weight: 600;
+      color: var(--gold-light);
+      line-height: 1.6;
+      max-width: 700px;
+      margin: 0 auto 24px;
+      letter-spacing: 0.04em;
+    }
+    .quote-author {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.5);
+      letter-spacing: 0.15em;
+    }
+
+    /* ══════════ FOOTER ══════════ */
+    footer {
+      background: #1e1610;
+      color: rgba(255,255,255,0.6);
+      padding: 56px 0 32px;
+      text-align: center;
+    }
+    .footer-logo {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--gold-light);
+      margin-bottom: 12px;
+    }
+    .footer-tagline {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.35);
+      letter-spacing: 0.1em;
+      margin-bottom: 36px;
+    }
+    .footer-nav {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      list-style: none;
+      margin-bottom: 32px;
+    }
+    .footer-nav a {
+      text-decoration: none;
+      font-size: 0.82rem;
+      color: rgba(255,255,255,0.4);
+      transition: color 0.2s;
+      letter-spacing: 0.05em;
+    }
+    .footer-nav a:hover { color: var(--gold-light); }
+    .footer-divider {
+      width: 60px;
+      height: 1px;
+      background: rgba(255,255,255,0.1);
+      margin: 0 auto 24px;
+    }
+    .footer-copy {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.2);
+      letter-spacing: 0.05em;
+    }
+
+    /* ══════════ SCROLL ANIMATION ══════════ */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ══════════ RESPONSIVE ══════════ */
+    @media (max-width: 768px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+
+      .about-grid { grid-template-columns: 1fr; gap: 40px; }
+      .about-badge { right: 0; bottom: -16px; }
+
+      .gallery-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-auto-rows: 140px;
+      }
+      .gallery-item-1, .gallery-item-6 { grid-column: span 2; }
+      .gallery-item-2, .gallery-item-3, .gallery-item-4, .gallery-item-5,
+      .gallery-item-7, .gallery-item-8 { grid-column: span 1; }
+      [class*="gallery-item-"] { grid-row: span 1; }
+
+      .timeline-wrap::before { left: 20px; }
+      .tl-item, .tl-item:nth-child(even) {
+        flex-direction: column;
+        padding-left: 48px;
+      }
+      .tl-item:nth-child(even) .tl-content { text-align: left; }
+      .tl-dot { left: 20px; }
+      .tl-spacer { display: none; }
+
+      .gallery-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+
+      .family-stats { flex-wrap: wrap; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── NAVIGATION ── -->
+  <nav id="navbar">
+    <div class="nav-logo">邓<span>家</span> · 相册</div>
+    <ul class="nav-links">
+      <li><a href="#about">关于我们</a></li>
+      <li><a href="#gallery">相册</a></li>
+      <li><a href="#timeline">时光轴</a></li>
+      <li><a href="#members">家庭成员</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-circle hero-circle-1"></div>
+    <div class="hero-circle hero-circle-2"></div>
+    <div class="hero-circle hero-circle-3"></div>
+
+    <div class="leaf leaf-1">🌿</div>
+    <div class="leaf leaf-2">🍃</div>
+    <div class="leaf leaf-3">🌸</div>
+    <div class="leaf leaf-4">✿</div>
+
+    <div class="hero-content">
+      <div class="hero-tag">Family · Photos · Memories</div>
+      <h1 class="hero-title">
+        邓家<br/><span class="highlight">珍贵时光</span>
+      </h1>
+      <p class="hero-subtitle">
+        记录每一个平凡而珍贵的家庭瞬间<br/>
+        用照片留住爱与温暖的记忆
+      </p>
+      <a href="#gallery" class="hero-cta">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        浏览相册
+      </a>
+    </div>
+
+    <div class="hero-scroll">
+      <span>向下滚动</span>
+      <div class="arrow"></div>
+    </div>
+  </section>
+
+  <!-- ── ABOUT ── -->
+  <section id="about">
+    <div class="container">
+      <div class="about-grid">
+
+        <div class="about-visual reveal">
+          <div class="photo-frame">
+            <img src="photos/DSCN0028.jpg" alt="邓家全家福" class="about-photo" />
+          </div>
+          <div class="about-badge">
+            <div class="badge-icon">🏡</div>
+            <div class="badge-text">
+              <strong>温暖小家</strong>
+              爱是最好的纽带
+            </div>
+          </div>
+        </div>
+
+        <div class="about-text reveal reveal-delay-2">
+          <span class="section-label">About Us · 关于我们</span>
+          <h2 class="section-title">家，是心<br/>最柔软的地方</h2>
+          <p class="section-desc">
+            这里是邓家的专属相册，记录着我们一家人最真实、最温暖的生活片段。
+            无论是节假日的欢聚，还是日常里的小确幸，每一张照片都承载着满满的爱与感动。
+          </p>
+          <p class="section-desc" style="margin-top: 16px;">
+            岁月流逝，但这些画面将永远定格在我们心中，成为最珍贵的家庭记忆。
+          </p>
+          <div class="family-stats">
+            <div class="stat-item">
+              <div class="stat-num">4</div>
+              <div class="stat-unit">家庭成员</div>
+            </div>
+            <div class="divider-v"></div>
+            <div class="stat-item">
+              <div class="stat-num">500+</div>
+              <div class="stat-unit">珍藏照片</div>
+            </div>
+            <div class="divider-v"></div>
+            <div class="stat-item">
+              <div class="stat-num">20+</div>
+              <div class="stat-unit">年的故事</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── GALLERY ── -->
+  <section id="gallery">
+    <div class="container">
+      <div class="gallery-header">
+        <div>
+          <span class="section-label">Gallery · 家庭相册</span>
+          <h2 class="section-title">定格美好瞬间</h2>
+        </div>
+        <a href="#" class="view-all">查看全部照片 →</a>
+      </div>
+
+      <div class="gallery-grid reveal">
+
+        <div class="gallery-item gallery-item-1">
+          <img src="photos/travel1.jpg" alt="内蒙古之旅" class="gallery-img" />
+          <div class="gallery-overlay">
+            <span class="overlay-text">🌊 内蒙古大草原之旅</span>
+          </div>
+        </div>
+
+        <div class="gallery-item gallery-item-2">
+          <img src="photos/daughter1.jpg" alt="女儿照片" class="gallery-img" />
+          <div class="gallery-overlay">
+            <span class="overlay-text">👧 心怡的童年时光</span>
+          </div>
+        </div>
+
+        <div class="gallery-item gallery-item-3">
+          <img src="photos/family1.jpg" alt="家庭照" class="gallery-img" />
+          <div class="gallery-overlay">
+            <span class="overlay-text">👨‍👩‍👧 温馨家庭照</span>
+          </div>
+        </div>
+
+        <div class="gallery-item gallery-item-4">
+          <img src="photos/party1.jpg" alt="同学聚会" class="gallery-img" />
+          <div class="gallery-overlay">
+            <span class="overlay-text">🎉 技校同学聚会</span>
+          </div>
+        </div>
+
+        <div class="gallery-item gallery-item-5">
+          <img src="photos/scan1.jpg" alt="老照片" class="gallery-img" />
+          <div class="gallery-overlay">
+            <span class="overlay-text">📷 珍贵老照片</span>
+          </div>
+        </div>
+
+        <div class="gallery-item gallery-item-6">
+          <img src="photos/travel2.jpg" alt="草原" class="gallery-img" />
+          <div class="gallery-overlay">
+            <span class="overlay-text">🏕️ 希拉穆仁大草原</span>
+          </div>
+        </div>
+
+        <div class="gallery-item gallery-item-7">
+          <img src="photos/treasure1.jpg" alt="珍藏" class="gallery-img" />
+          <div class="gallery-overlay">
+            <span class="overlay-text">💎 珍藏回忆</span>
+          </div>
+        </div>
+
+        <div class="gallery-item gallery-item-8">
+          <img src="photos/outdoor1.jpg" alt="岜沙" class="gallery-img" />
+          <div class="gallery-overlay">
+            <span class="overlay-text">🌿 岜沙风情</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── TIMELINE ── -->
+  <section id="timeline">
+    <div class="container">
+      <div class="section-header" style="text-align:center;">
+        <span class="section-label">Timeline · 时光轴</span>
+        <h2 class="section-title">我们走过的岁月</h2>
+      </div>
+
+      <div class="timeline-wrap">
+
+        <div class="tl-item reveal">
+          <div class="tl-content">
+            <span class="tl-emoji">💒</span>
+            <div class="tl-year">2003 · 年</div>
+            <div class="tl-title">相识相爱，缘定终生</div>
+            <div class="tl-desc">两颗心相遇，开启了属于邓家的幸福故事。从此，一切美好都有了见证者。</div>
+          </div>
+          <div class="tl-dot"></div>
+          <div class="tl-spacer"></div>
+        </div>
+
+        <div class="tl-item reveal reveal-delay-1">
+          <div class="tl-spacer"></div>
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <span class="tl-emoji">🏠</span>
+            <div class="tl-year">2006 · 年</div>
+            <div class="tl-title">安家落户，温馨小窝</div>
+            <div class="tl-desc">属于我们自己的家，从空荡荡到处处是温暖，每一寸都是我们共同创造的记忆。</div>
+          </div>
+        </div>
+
+        <div class="tl-item reveal reveal-delay-1">
+          <div class="tl-content">
+            <span class="tl-emoji">👶</span>
+            <div class="tl-year">2009 · 年</div>
+            <div class="tl-title">新生命降临，家的完整</div>
+            <div class="tl-desc">孩子的第一声啼哭，是世界上最美的声音。从那一刻起，我们的家有了新的意义。</div>
+          </div>
+          <div class="tl-dot"></div>
+          <div class="tl-spacer"></div>
+        </div>
+
+        <div class="tl-item reveal reveal-delay-1">
+          <div class="tl-spacer"></div>
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <span class="tl-emoji">🌏</span>
+            <div class="tl-year">2015 · 年</div>
+            <div class="tl-title">第一次家庭旅行</div>
+            <div class="tl-desc">带着孩子，一家人第一次出国旅行，看见了更大的世界，也留下了最珍贵的合影。</div>
+          </div>
+        </div>
+
+        <div class="tl-item reveal reveal-delay-1">
+          <div class="tl-content">
+            <span class="tl-emoji">🎓</span>
+            <div class="tl-year">2027 · 年</div>
+            <div class="tl-title">满怀期待，美好在前</div>
+            <div class="tl-desc">未来的每一个重要时刻，都将继续记录在这里。期待更多美好与惊喜。</div>
+          </div>
+          <div class="tl-dot"></div>
+          <div class="tl-spacer"></div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MEMBERS ── -->
+  <section id="members">
+    <div class="container">
+      <div class="section-header" style="text-align:center;">
+        <span class="section-label">Members · 家庭成员</span>
+        <h2 class="section-title">我们的小家</h2>
+      </div>
+
+      <div class="members-grid">
+
+        <div class="member-card reveal">
+          <div class="member-avatar">👨</div>
+          <div class="member-name">邓爸爸</div>
+          <div class="member-role">家中顶梁柱</div>
+          <div class="member-quote">"每天回家看到你们，所有疲惫都值得。"</div>
+        </div>
+
+        <div class="member-card reveal reveal-delay-1">
+          <div class="member-avatar">👩</div>
+          <div class="member-name">邓妈妈</div>
+          <div class="member-role">家中的暖心女主人</div>
+          <div class="member-quote">"家不一定要多大，有爱就足够了。"</div>
+        </div>
+
+        <div class="member-card reveal reveal-delay-2">
+          <div class="member-avatar">👦</div>
+          <div class="member-name">邓小宝</div>
+          <div class="member-role">快乐的小探险家</div>
+          <div class="member-quote">"世界那么大，想和爸爸妈妈一起看！"</div>
+        </div>
+
+        <div class="member-card reveal reveal-delay-3">
+          <div class="member-avatar">🐱</div>
+          <div class="member-name">橘子</div>
+          <div class="member-role">毛茸茸的家庭成员</div>
+          <div class="member-quote">"喵~ 我是这个家里最重要的存在。"</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── QUOTE ── -->
+  <section id="quote">
+    <div class="container">
+      <div class="quote-content reveal">
+        <span class="quote-icon">❝</span>
+        <p class="quote-text">
+          家是什么？<br/>
+          是一顿热乎乎的饭，是灯火通明等你回来，<br/>
+          是那些看似平常却无比珍贵的普通日子。
+        </p>
+        <p class="quote-author">— 邓家 · 写给时光的情书 —</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <div class="container">
+      <div class="footer-logo">邓家相册</div>
+      <p class="footer-tagline">Family · Love · Memories · 家的温度</p>
+      <ul class="footer-nav">
+        <li><a href="#about">关于我们</a></li>
+        <li><a href="#gallery">相册</a></li>
+        <li><a href="#timeline">时光轴</a></li>
+        <li><a href="#members">家庭成员</a></li>
+      </ul>
+      <div class="footer-divider"></div>
+      <p class="footer-copy">© 2026 邓家相册 · 用爱记录每一天 · 保留所有温暖</p>
+    </div>
+  </footer>
+
+  <script>
+    // ── Navbar scroll effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // ── Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    reveals.forEach(el => observer.observe(el));
+
+    // ── Smooth anchor scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // ── Gallery item hover lift effect with cursor
+    document.querySelectorAll('.gallery-item').forEach(item => {
+      item.addEventListener('mousemove', (e) => {
+        const rect = item.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        item.style.transform = `translateY(-6px) perspective(600px) rotateY(${x * 6}deg) rotateX(${-y * 6}deg) scale(1.01)`;
+      });
+      item.addEventListener('mouseleave', () => {
+        item.style.transform = '';
+      });
+    });
+
+    // ── Member card tilt effect
+    document.querySelectorAll('.member-card').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        card.style.transform = `translateY(-8px) perspective(500px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+      });
+    });
+  </script>
+</body>
+</html>
