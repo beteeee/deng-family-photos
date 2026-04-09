@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>邓家相册 · 家的温度</title>
+  <!-- 背景音乐 -->
+  <audio id="bgMusic" loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  </audio>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&family=Noto+Sans+SC:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -223,6 +227,32 @@
       box-shadow: 0 14px 30px rgba(201,169,110,0.45);
     }
     .hero-cta svg { width: 18px; height: 18px; }
+
+    /* 音乐播放按钮 */
+    .music-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255,255,255,0.25);
+      border: 1px solid var(--gold-light);
+      color: var(--brown);
+      padding: 10px 20px;
+      border-radius: 25px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: all 0.3s;
+      backdrop-filter: blur(4px);
+    }
+    .music-btn:hover {
+      background: rgba(255,255,255,0.4);
+      transform: translateY(-2px);
+    }
+    .music-btn.playing {
+      background: var(--gold);
+      color: white;
+      border-color: var(--gold);
+    }
 
     .hero-scroll {
       position: absolute;
@@ -740,9 +770,13 @@
         邓家<br/><span class="highlight">珍贵时光</span>
       </h1>
       <p class="hero-subtitle">
-        记录每一个平凡而珍贵的家庭瞬间<br/>
-        用照片留住爱与温暖的记忆
+        1998年，两颗心相遇，从此有了邓家的故事<br/>
+        二十余载春秋，从二人世界到七口之家<br/>
+        用照片留住每一个爱与温暖的瞬间
       </p>
+      <button id="musicToggle" class="music-btn" onclick="toggleMusic()">
+        <span id="musicIcon">🎵</span> 播放背景音乐
+      </button>
       <a href="#gallery" class="hero-cta">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
         浏览相册
@@ -765,10 +799,10 @@
             <img src="photos/DSCN0028.jpg" alt="邓家全家福" class="about-photo" />
           </div>
           <div class="about-badge">
-            <div class="badge-icon">🏡</div>
+            <div class="badge-icon">💝</div>
             <div class="badge-text">
-              <strong>温暖小家</strong>
-              爱是最好的纽带
+              <strong>邓家七口</strong>
+              1998-2024 爱一直在
             </div>
           </div>
         </div>
@@ -777,26 +811,25 @@
           <span class="section-label">About Us · 关于我们</span>
           <h2 class="section-title">家，是心<br/>最柔软的地方</h2>
           <p class="section-desc">
-            这里是邓家的专属相册，记录着我们一家人最真实、最温暖的生活片段。
-            无论是节假日的欢聚，还是日常里的小确幸，每一张照片都承载着满满的爱与感动。
+            这里是邓家的专属相册，记录着我们一家人最真实、最温暖的生活片段。从1998年相识相爱，到2000年有了自己的第一个小家，再到2001年心怡的降临，每一个瞬间都是生命中最珍贵的礼物。
           </p>
           <p class="section-desc" style="margin-top: 16px;">
-            岁月流逝，但这些画面将永远定格在我们心中，成为最珍贵的家庭记忆。
+            2024年，我们终于建起了属于自己的房子，哆咪、薯条、妞妞、球球也加入了这个温暖的大家庭。七口之家的每一天，都充满了欢声笑语。岁月流逝，但这些画面将永远定格在我们心中，成为最珍贵的家庭记忆。
           </p>
           <div class="family-stats">
             <div class="stat-item">
-              <div class="stat-num">4</div>
+              <div class="stat-num">7</div>
               <div class="stat-unit">家庭成员</div>
             </div>
             <div class="divider-v"></div>
             <div class="stat-item">
-              <div class="stat-num">500+</div>
-              <div class="stat-unit">珍藏照片</div>
+              <div class="stat-num">26</div>
+              <div class="stat-unit">年相伴</div>
             </div>
             <div class="divider-v"></div>
             <div class="stat-item">
-              <div class="stat-num">20+</div>
-              <div class="stat-unit">年的故事</div>
+              <div class="stat-num">∞</div>
+              <div class="stat-unit">爱的记忆</div>
             </div>
           </div>
         </div>
@@ -884,16 +917,19 @@
       <div class="section-header" style="text-align:center;">
         <span class="section-label">Timeline · 时光轴</span>
         <h2 class="section-title">我们走过的岁月</h2>
+        <p class="section-desc" style="max-width: 600px; margin: 16px auto 0; text-align: center;">
+          从1998年到2024年，二十六年的时光，见证了我们的爱情、家庭的成长，还有那些毛茸茸的小成员们带来的欢乐。每一个节点，都是生命中最珍贵的记忆。
+        </p>
       </div>
 
       <div class="timeline-wrap">
 
         <div class="tl-item reveal">
           <div class="tl-content">
-            <span class="tl-emoji">💒</span>
+            <span class="tl-emoji">💕</span>
             <div class="tl-year">1998 · 年</div>
             <div class="tl-title">相识相爱，缘定终生</div>
-            <div class="tl-desc">两颗心相遇，开启了属于邓家的幸福故事。从此，一切美好都有了见证者。</div>
+            <div class="tl-desc">那一年，命运让我们相遇。从相识到相知，从相知到相爱，两颗心紧紧依偎在一起。从此，无论风雨，都有了彼此的陪伴。这是邓家故事的开始，也是一生幸福的起点。</div>
           </div>
           <div class="tl-dot"></div>
           <div class="tl-spacer"></div>
@@ -906,7 +942,7 @@
             <span class="tl-emoji">🏠</span>
             <div class="tl-year">2000 · 年</div>
             <div class="tl-title">有了自己的第一个小家</div>
-            <div class="tl-desc">属于我们自己的家，从空荡荡到处处是温暖，每一寸都是我们共同创造的记忆。</div>
+            <div class="tl-desc">2000年，我们终于有了属于自己的小窝。虽然不大，但每一个角落都充满了我们的心血和期待。从空荡荡的房间到温馨的家，我们一起挑选家具，一起布置房间，一起规划未来。这里，是我们梦想起航的地方。</div>
           </div>
         </div>
 
@@ -915,7 +951,7 @@
             <span class="tl-emoji">👶</span>
             <div class="tl-year">2001 · 年</div>
             <div class="tl-title">邓心怡降临，家的完整</div>
-            <div class="tl-desc">心怡的第一声啼哭，是世界上最美的声音。从那一刻起，我们的家有了新的意义。</div>
+            <div class="tl-desc">2001年，我们的宝贝女儿心怡来到了这个世界。她的第一声啼哭，是这个家听过最美的声音。从那一刻起，我们的生活有了新的意义。看着她一天天长大，从蹒跚学步到亭亭玉立，每一个瞬间都是上天赐予的礼物。</div>
           </div>
           <div class="tl-dot"></div>
           <div class="tl-spacer"></div>
@@ -928,19 +964,30 @@
             <span class="tl-emoji">🏡</span>
             <div class="tl-year">2024 · 年</div>
             <div class="tl-title">建了第一栋自己的房子</div>
-            <div class="tl-desc">多年的梦想终于实现，拥有了自己的房子，这是属于邓家的温馨港湾。</div>
+            <div class="tl-desc">多年的梦想终于实现！2024年，我们建起了属于自己的房子。从一砖一瓦到一草一木，都凝聚着我们对家的热爱。这里有宽敞的院子，有明亮的房间，更有满满的爱。这是邓家的温馨港湾，是我们永远的避风港。</div>
           </div>
         </div>
 
         <div class="tl-item reveal reveal-delay-1">
           <div class="tl-content">
             <span class="tl-emoji">🐾</span>
-            <div class="tl-year">未来 · 年</div>
-            <div class="tl-title">满怀期待，美好在前</div>
-            <div class="tl-desc">未来的每一个重要时刻，都将继续记录在这里。期待更多美好与惊喜。</div>
+            <div class="tl-year">现在 · 每一天</div>
+            <div class="tl-title">七口之家的幸福生活</div>
+            <div class="tl-desc">如今的邓家，是一个充满欢声笑语的七口之家。哆咪在窗台上慵懒地晒太阳，薯条摇着短尾巴跑来跑去，妞妞和球球忠实地守护着这个家。每一天，都是平凡而珍贵的幸福时光。</div>
           </div>
           <div class="tl-dot"></div>
           <div class="tl-spacer"></div>
+        </div>
+
+        <div class="tl-item reveal reveal-delay-1">
+          <div class="tl-spacer"></div>
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <span class="tl-emoji">✨</span>
+            <div class="tl-year">未来 · 年</div>
+            <div class="tl-title">满怀期待，美好在前</div>
+            <div class="tl-desc">未来的路还很长，我们相信会有更多美好的故事等待书写。无论时光如何流转，邓家的爱将永远延续。期待与你们一起，见证更多温暖的瞬间。</div>
+          </div>
         </div>
 
       </div>
@@ -952,7 +999,10 @@
     <div class="container">
       <div class="section-header" style="text-align:center;">
         <span class="section-label">Members · 家庭成员</span>
-        <h2 class="section-title">我们的小家</h2>
+        <h2 class="section-title">我们的七口之家</h2>
+        <p class="section-desc" style="max-width: 600px; margin: 16px auto 0; text-align: center;">
+          三个人的温暖，加上四只毛茸茸的小可爱，组成了我们独一无二的邓家。每一个成员，都是这个家不可或缺的一部分。
+        </p>
       </div>
 
       <div class="members-grid">
@@ -960,50 +1010,50 @@
         <div class="member-card reveal">
           <div class="member-avatar">👨</div>
           <div class="member-name">邓爸爸</div>
-          <div class="member-role">家中顶梁柱</div>
-          <div class="member-quote">"每天回家看到你们，所有疲惫都值得。"</div>
+          <div class="member-role">家中顶梁柱 · 守护者的担当</div>
+          <div class="member-quote">"从1998年牵起你的手，我就知道这辈子要守护好这个家。每天回家看到你们的笑脸，所有的疲惫都烟消云散了。"</div>
         </div>
 
         <div class="member-card reveal reveal-delay-1">
           <div class="member-avatar">👩</div>
           <div class="member-name">邓妈妈</div>
-          <div class="member-role">家中的暖心女主人</div>
-          <div class="member-quote">"家不一定要多大，有爱就足够了。"</div>
+          <div class="member-role">家中的暖心女主人 · 爱的魔法师</div>
+          <div class="member-quote">"家不需要多大，有你们在就是全世界。看着心怡长大，看着毛孩子们撒欢，这就是我最大的幸福。"</div>
         </div>
 
         <div class="member-card reveal reveal-delay-2">
           <div class="member-avatar">👧</div>
           <div class="member-name">邓心怡</div>
-          <div class="member-role">2001年出生的宝贝女儿</div>
-          <div class="member-quote">"世界那么大，想和爸爸妈妈一起看！"</div>
+          <div class="member-role">2001年出生的宝贝女儿 · 全家的掌上明珠</div>
+          <div class="member-quote">"感谢爸爸妈妈给了我生命和满满的爱。世界那么大，最想和你们一起看遍世间美景。"</div>
         </div>
 
         <div class="member-card reveal reveal-delay-3">
           <div class="member-avatar">🐱</div>
           <div class="member-name">哆咪</div>
-          <div class="member-role">可爱的小猫咪</div>
-          <div class="member-quote">"喵~ 我是这个家里最温柔的存在。"</div>
+          <div class="member-role">温柔的小猫咪 · 窗台上的哲学家</div>
+          <div class="member-quote">"喵~ 我喜欢在窗台上晒太阳，看你们一家人其乐融融。这个家的温暖，连猫咪都能感受到。"</div>
         </div>
 
         <div class="member-card reveal reveal-delay-1">
           <div class="member-avatar">🐕</div>
           <div class="member-name">薯条</div>
-          <div class="member-role">活泼的柯基犬</div>
-          <div class="member-quote">"汪！有我在，这个家永远不会无聊！"</div>
+          <div class="member-role">活泼的柯基犬 · 快乐的源泉</div>
+          <div class="member-quote">"汪！虽然我的腿短，但我的快乐很长！有我在，这个家永远不会缺少欢笑！"</div>
         </div>
 
         <div class="member-card reveal reveal-delay-2">
           <div class="member-avatar">🐕</div>
           <div class="member-name">妞妞</div>
-          <div class="member-role">忠诚的田园犬</div>
-          <div class="member-quote">"守护这个家，是我最重要的使命。"</div>
+          <div class="member-role">忠诚的田园犬 · 家的守护者</div>
+          <div class="member-quote">"从我来到这个家的第一天起，守护你们就是我的使命。无论白天黑夜，我都会守护着邓家。"</div>
         </div>
 
         <div class="member-card reveal reveal-delay-3">
           <div class="member-avatar">🐕</div>
           <div class="member-name">球球</div>
-          <div class="member-role">可爱的田园犬</div>
-          <div class="member-quote">"有我在，每天都有好心情！"</div>
+          <div class="member-role">可爱的田园犬 · 开心果担当</div>
+          <div class="member-quote">"汪！我是球球，我喜欢追着蝴蝶跑，喜欢围着你们转圈圈。有我在，每一天都是开心的！"</div>
         </div>
 
       </div>
@@ -1016,11 +1066,13 @@
       <div class="quote-content reveal">
         <span class="quote-icon">❝</span>
         <p class="quote-text">
-          家是什么？<br/>
-          是一顿热乎乎的饭，是灯火通明等你回来，<br/>
-          是那些看似平常却无比珍贵的普通日子。
+          家，是1998年相遇时的怦然心动<br/>
+          是2000年第一个小家的温馨灯火<br/>
+          是2001年心怡降临时的喜悦泪水<br/>
+          是2024年新房建成时的梦想成真<br/>
+          是哆咪、薯条、妞妞、球球围绕身边的幸福时光
         </p>
-        <p class="quote-author">— 邓家 · 写给时光的情书 —</p>
+        <p class="quote-author">— 邓家 · 写给时光的情书 —<br/><span style="font-size: 0.8rem; opacity: 0.7;">1998-2024 · 爱一直在延续</span></p>
       </div>
     </div>
   </section>
@@ -1097,6 +1149,28 @@
         card.style.transform = '';
       });
     });
+
+    // ── Music toggle
+    let isPlaying = false;
+    const bgMusic = document.getElementById('bgMusic');
+    const musicBtn = document.getElementById('musicToggle');
+    const musicIcon = document.getElementById('musicIcon');
+
+    function toggleMusic() {
+      if (isPlaying) {
+        bgMusic.pause();
+        musicBtn.classList.remove('playing');
+        musicIcon.textContent = '🎵';
+        musicBtn.innerHTML = '<span id="musicIcon">🎵</span> 播放背景音乐';
+      } else {
+        bgMusic.volume = 0.3;
+        bgMusic.play().catch(e => console.log('Audio play failed:', e));
+        musicBtn.classList.add('playing');
+        musicIcon.textContent = '🎶';
+        musicBtn.innerHTML = '<span id="musicIcon">🎶</span> 暂停背景音乐';
+      }
+      isPlaying = !isPlaying;
+    }
   </script>
 </body>
 </html>
