@@ -774,8 +774,8 @@
         二十余载春秋，从二人世界到七口之家<br/>
         用照片留住每一个爱与温暖的瞬间
       </p>
-      <button id="musicToggle" class="music-btn" onclick="toggleMusic()">
-        <span id="musicIcon">🎵</span> 播放背景音乐
+      <button id="musicToggle" class="music-btn playing" onclick="toggleMusic()">
+        <span id="musicIcon">🎶</span> 音乐播放中
       </button>
       <a href="#gallery" class="hero-cta">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
@@ -1167,10 +1167,31 @@
         bgMusic.play().catch(e => console.log('Audio play failed:', e));
         musicBtn.classList.add('playing');
         musicIcon.textContent = '🎶';
-        musicBtn.innerHTML = '<span id="musicIcon">🎶</span> 暂停背景音乐';
+        musicBtn.innerHTML = '<span id="musicIcon">🎶</span> 音乐播放中';
       }
       isPlaying = !isPlaying;
     }
+
+    // ── Auto play music on page load
+    window.addEventListener('load', () => {
+      bgMusic.volume = 0.3;
+      bgMusic.play().then(() => {
+        isPlaying = true;
+        console.log('Music started playing');
+      }).catch(e => {
+        // Auto-play blocked by browser, wait for user interaction
+        console.log('Auto-play blocked, waiting for user interaction');
+        const startMusic = () => {
+          bgMusic.play().then(() => {
+            isPlaying = true;
+            document.removeEventListener('click', startMusic);
+            document.removeEventListener('scroll', startMusic);
+          }).catch(err => console.log('Play failed:', err));
+        };
+        document.addEventListener('click', startMusic);
+        document.addEventListener('scroll', startMusic);
+      });
+    });
   </script>
 </body>
 </html>
